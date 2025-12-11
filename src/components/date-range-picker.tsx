@@ -45,18 +45,18 @@ export function DateRangePicker({
             variant={"outline"}
             className={cn(
               "w-[300px] justify-start text-left font-normal",
-              !initialDate && "text-muted-foreground"
+              !date && "text-muted-foreground"
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {initialDate?.from ? (
-              initialDate.to ? (
+            {date?.from ? (
+              date.to ? (
                 <>
-                  {format(initialDate.from, "LLL dd, y")} -{" "}
-                  {format(initialDate.to, "LLL dd, y")}
+                  {format(date.from, "LLL dd, y")} -{" "}
+                  {format(date.to, "LLL dd, y")}
                 </>
               ) : (
-                format(initialDate.from, "LLL dd, y")
+                format(date.from, "LLL dd, y")
               )
             ) : (
               <span>Pick a date</span>
