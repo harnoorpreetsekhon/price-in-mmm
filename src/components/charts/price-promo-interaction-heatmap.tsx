@@ -32,6 +32,21 @@ export default function PricePromoInteractionHeatmap({
 }: {
   data: MarketingData[];
 }) {
+  if (data.length === 0) {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Price × Promo Interaction Heatmap</CardTitle>
+                <CardDescription>
+                Average weekly sales volume based on price and promotion level.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="text-center text-muted-foreground h-[300px] flex items-center justify-center">
+                <p>No data available for the selected period.</p>
+            </CardContent>
+        </Card>
+    );
+  }
   const priceBands = 4;
   const promoBands = 3; // No Promo, Low Discount, High Discount
 
@@ -44,7 +59,11 @@ export default function PricePromoInteractionHeatmap({
   );
 
   data.forEach(d => {
-    const priceBandIndex = Math.min(priceBands - 1, Math.floor((d.price - minPrice) / priceStep));
+    let priceBandIndex = 0;
+    if (priceStep > 0) {
+      priceBandIndex = Math.min(priceBands - 1, Math.floor((d.price - minPrice) / priceStep));
+    }
+    
     let promoBandIndex = 0;
     if (d.promo_flag) {
         promoBandIndex = d.promo_discount_pct < 0.15 ? 1 : 2;
@@ -61,10 +80,15 @@ export default function PricePromoInteractionHeatmap({
   );
   
   const allSales = avgSalesData.flat().filter(s => s > 0);
-  const minSales = Math.min(...allSales);
-  const maxSales = Math.max(...allSales);
+  const minSales = allSales.length > 0 ? Math.min(...allSales) : 0;
+  const maxSales = allSales.length > 0 ? Math.max(...allSales) : 0;
 
-  const priceLabels = Array.from({ length: priceBands }, (_, i) => `$${(minPrice + i * priceStep).toFixed(2)} - $${(minPrice + (i + 1) * priceStep).toFixed(2)}`);
+  const priceLabels = Array.from({ length: priceBands }, (_, i) => {
+    if (priceStep > 0) {
+      return `$${(minPrice + i * priceStep).toFixed(2)} - $${(minPrice + (i + 1) * priceStep).toFixed(2)}`
+    }
+    return `$${minPrice.toFixed(2)}`;
+  });
   const promoLabels = ["No Promo", "Low Promo", "High Promo"];
 
   return (
@@ -81,7 +105,7 @@ export default function PricePromoInteractionHeatmap({
           <TableHeader>
             <TableRow>
               <TableHead>Promo Level</TableHead>
-              {priceLabels.map(label => <TableHead key={label} className="text-center">{label}</TableHead>)}
+              {priceLabels.map((label, index) => <TableHead key={`${label}-${index}`} className="text-center">{label}</TableHead>)}
             </TableRow>
           </TableHeader>
           <TableBody>
