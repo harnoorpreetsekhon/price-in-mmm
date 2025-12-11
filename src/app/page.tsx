@@ -1,23 +1,21 @@
-import DashboardLayout from "@/components/dashboard-layout";
-import CorePerformanceSection from "@/components/sections/core-performance";
-import PriceEffectSection from "@/components/sections/price-effect";
-import MarketingImpactSection from "@/components/sections/marketing-impact";
-import CompetitionSection from "@/components/sections/competition";
-import { mmmData, MarketingData } from "@/lib/data";
+'use client';
+
+import { useState } from 'react';
+import { DateRange } from 'react-day-picker';
+import { subDays } from 'date-fns';
+import DashboardLayout from '@/components/dashboard-layout';
+import CorePerformanceSection from '@/components/sections/core-performance';
+import PriceEffectSection from '@/components/sections/price-effect';
+import MarketingImpactSection from '@/components/sections/marketing-impact';
+import CompetitionSection from '@/components/sections/competition';
+import { mmmData, MarketingData } from '@/lib/data';
 import {
   calculateKpis,
   Kpi,
   formatCurrency,
   formatNumber,
   formatPercentage,
-} from "@/lib/calculations";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "@/components/ui/card";
+} from '@/lib/calculations';
 import {
   DollarSign,
   Target,
@@ -27,85 +25,94 @@ import {
   Percent,
   TrendingUp,
   Swords,
-  Badge,
-} from "lucide-react";
-import KpiCard from "@/components/kpi-card";
+} from 'lucide-react';
+import KpiCard from '@/components/kpi-card';
+import { DateRangePicker } from '@/components/date-range-picker';
 
 export default function Home() {
-  const data: MarketingData[] = mmmData;
-  const kpis = calculateKpis(data);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: subDays(new Date(), mmmData.length),
+    to: new Date(),
+  });
+
+  const filteredData = mmmData.filter((d) => {
+    const date = new Date(d.date);
+    if (!dateRange?.from || !dateRange?.to) return true;
+    return date >= dateRange.from && date <= dateRange.to;
+  });
+
+  const kpis = calculateKpis(filteredData);
 
   const kpiConfig = [
     {
-      title: "Total Revenue",
-      key: "totalRevenue",
+      title: 'Total Revenue',
+      key: 'totalRevenue',
       icon: DollarSign,
       formatter: formatCurrency,
-      description: "Total sales revenue over the period.",
+      description: 'Total sales revenue over the period.',
     },
     {
-      title: "Baseline Revenue",
-      key: "baselineRevenue",
+      title: 'Baseline Revenue',
+      key: 'baselineRevenue',
       icon: BarChart,
       formatter: formatCurrency,
-      description: "Revenue generated without any marketing activities.",
+      description: 'Revenue generated without any marketing activities.',
     },
     {
-      title: "Incremental Revenue",
-      key: "incrementalRevenue",
+      title: 'Incremental Revenue',
+      key: 'incrementalRevenue',
       icon: TrendingUp,
       formatter: formatCurrency,
-      description: "Revenue directly attributable to marketing efforts.",
+      description: 'Revenue directly attributable to marketing efforts.',
     },
     {
-      title: "Total Marketing Spend",
-      key: "totalMarketingSpend",
+      title: 'Total Marketing Spend',
+      key: 'totalMarketingSpend',
       icon: Megaphone,
       formatter: formatCurrency,
-      description: "Total investment across all marketing channels.",
+      description: 'Total investment across all marketing channels.',
     },
     {
-      title: "Total ROAS",
-      key: "totalROAS",
+      title: 'Total ROAS',
+      key: 'totalROAS',
       icon: Target,
       formatter: (val: number) => `${formatNumber(val)}x`,
-      description: "Return on Ad Spend. (Incremental Revenue / Marketing Spend)",
+      description: 'Return on Ad Spend. (Incremental Revenue / Marketing Spend)',
     },
     {
-      title: "Price Elasticity",
-      key: "priceElasticity",
+      title: 'Price Elasticity',
+      key: 'priceElasticity',
       icon: LineChart,
       formatter: formatNumber,
-      description: "Sensitivity of demand to price changes.",
+      description: 'Sensitivity of demand to price changes.',
     },
     {
-      title: "Optimal Price (Revenue)",
-      key: "optimalPriceRevenue",
+      title: 'Optimal Price (Revenue)',
+      key: 'optimalPriceRevenue',
       icon: DollarSign,
       formatter: formatCurrency,
-      description: "Price that maximizes total revenue.",
+      description: 'Price that maximizes total revenue.',
     },
     {
-      title: "Optimal Price (Profit)",
-      key: "optimalPriceProfit",
+      title: 'Optimal Price (Profit)',
+      key: 'optimalPriceProfit',
       icon: DollarSign,
-      iconColor: "text-green-500",
       formatter: formatCurrency,
-      description: "Price that maximizes total profit.",
+      description: 'Price that maximizes total profit.',
     },
     {
-      title: "Promo Uplift",
-      key: "promoUplift",
+      title: 'Promo Uplift',
+      key: 'promoUplift',
       icon: Percent,
       formatter: formatPercentage,
-      description: "Average sales lift during promotional periods.",
+      description: 'Average sales lift during promotional periods.',
     },
     {
-      title: "Comp. Price Pressure",
-      key: "competitorPricePressureIndex",
+      title: 'Comp. Price Pressure',
+      key: 'competitorPricePressureIndex',
       icon: Swords,
       formatter: formatNumber,
-      description: "Index of competitor pricing impact on sales.",
+      description: 'Index of competitor pricing impact on sales.',
     },
   ];
 
@@ -116,6 +123,9 @@ export default function Home() {
           <h1 className="text-3xl font-bold tracking-tight font-headline">
             MarketMix Navigator
           </h1>
+          <div className="flex items-center space-x-2">
+            <DateRangePicker date={dateRange} onDateChange={setDateRange} />
+          </div>
         </div>
 
         <div
@@ -134,10 +144,10 @@ export default function Home() {
         </div>
 
         <div className="space-y-8">
-          <CorePerformanceSection data={data} />
-          <PriceEffectSection data={data} kpis={kpis}/>
-          <MarketingImpactSection data={data} />
-          <CompetitionSection data={data} />
+          <CorePerformanceSection data={filteredData} />
+          <PriceEffectSection data={filteredData} kpis={kpis} />
+          <MarketingImpactSection data={filteredData} />
+          <CompetitionSection data={filteredData} />
         </div>
       </div>
     </DashboardLayout>
