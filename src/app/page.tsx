@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DateRange } from 'react-day-picker';
 import { subDays } from 'date-fns';
 import DashboardLayout from '@/components/dashboard-layout';
@@ -28,20 +28,32 @@ import {
 } from 'lucide-react';
 import KpiCard from '@/components/kpi-card';
 import { DateRangePicker } from '@/components/date-range-picker';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export default function Home() {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: subDays(new Date(), mmmData.length),
-    to: new Date(),
-  });
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
+  const [kpis, setKpis] = useState<Kpi | null>(null);
+  const [filteredData, setFilteredData] = useState<MarketingData[]>([]);
 
-  const filteredData = mmmData.filter((d) => {
-    const date = new Date(d.date);
-    if (!dateRange?.from || !dateRange?.to) return true;
-    return date >= dateRange.from && date <= dateRange.to;
-  });
+  useEffect(() => {
+    const defaultDateRange = {
+      from: subDays(new Date(), mmmData.length),
+      to: new Date(),
+    };
+    setDateRange(defaultDateRange);
+  }, []);
 
-  const kpis = calculateKpis(filteredData);
+  useEffect(() => {
+    if (dateRange?.from && dateRange?.to) {
+      const filtered = mmmData.filter((d) => {
+        const date = new Date(d.date);
+        return date >= dateRange.from! && date <= dateRange.to!;
+      });
+      setFilteredData(filtered);
+      setKpis(calculateKpis(filtered));
+    }
+  }, [dateRange]);
 
   const kpiConfig = [
     {
@@ -132,23 +144,45 @@ export default function Home() {
           id="kpis"
           className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
         >
-          {kpiConfig.map((kpi) => (
-            <KpiCard
-              key={kpi.key}
-              title={kpi.title}
-              value={kpi.formatter(kpis[kpi.key as keyof Kpi])}
-              icon={kpi.icon}
-              description={kpi.description}
-            />
-          ))}
+          {kpis ? (
+            kpiConfig.map((kpi) => (
+              <KpiCard
+                key={kpi.key}
+                title={kpi.title}
+                value={kpi.formatter(kpis[kpi.key as keyof Kpi])}
+                icon={kpi.icon}
+                description={kpi.description}
+              />
+            ))
+          ) : (
+            Array.from({ length: 10 }).map((_, index) => (
+              <Card key={index}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="h-4 w-4" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-7 w-1/2 mb-2" />
+                  <Skeleton className="h-3 w-full" />
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
 
-        <div className="space-y-8">
-          <CorePerformanceSection data={filteredData} />
-          <PriceEffectSection data={filteredData} kpis={kpis} />
-          <MarketingImpactSection data={filteredData} />
-          <CompetitionSection data={filteredData} />
-        </div>
+        {kpis ? (
+          <div className="space-y-8">
+            <CorePerformanceSection data={filteredData} />
+            <PriceEffectSection data={filteredData} kpis={kpis} />
+            <MarketingImpactSection data={filteredData} />
+            <CompetitionSection data={filteredData} />
+          </div>
+        ) : (
+          <div className="space-y-8">
+            <Skeleton className="h-[400px] w-full" />
+            <Skeleton className="h-[400px] w-full" />
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );
