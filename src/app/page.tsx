@@ -29,7 +29,7 @@ import {
 import KpiCard from '@/components/kpi-card';
 import { DateRangePicker } from '@/components/date-range-picker';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function Home() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
@@ -136,7 +136,7 @@ export default function Home() {
             MarketMix Navigator
           </h1>
           <div className="flex items-center space-x-2">
-            <DateRangePicker date={dateRange} onDateChange={setDateRange} />
+            <DateRangePicker initialDate={dateRange} onApply={setDateRange} />
           </div>
         </div>
 

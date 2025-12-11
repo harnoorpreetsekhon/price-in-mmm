@@ -15,37 +15,48 @@ import {
 } from "@/components/ui/popover"
 
 interface DateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
-    date: DateRange | undefined;
-    onDateChange: (date: DateRange | undefined) => void;
+    initialDate: DateRange | undefined;
+    onApply: (date: DateRange | undefined) => void;
 }
 
 export function DateRangePicker({
   className,
-  date,
-  onDateChange
+  initialDate,
+  onApply
 }: DateRangePickerProps) {
+  const [date, setDate] = React.useState<DateRange | undefined>(initialDate);
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    setDate(initialDate);
+  }, [initialDate]);
+
+  const handleApply = () => {
+    onApply(date);
+    setIsOpen(false);
+  }
   
   return (
     <div className={cn("grid gap-2", className)}>
-      <Popover>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={"outline"}
             className={cn(
               "w-[300px] justify-start text-left font-normal",
-              !date && "text-muted-foreground"
+              !initialDate && "text-muted-foreground"
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
+            {initialDate?.from ? (
+              initialDate.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(initialDate.from, "LLL dd, y")} -{" "}
+                  {format(initialDate.to, "LLL dd, y")}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(initialDate.from, "LLL dd, y")
               )
             ) : (
               <span>Pick a date</span>
@@ -58,9 +69,12 @@ export function DateRangePicker({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={onDateChange}
+            onSelect={setDate}
             numberOfMonths={2}
           />
+          <div className="flex justify-end p-2 border-t">
+            <Button onClick={handleApply}>Apply</Button>
+          </div>
         </PopoverContent>
       </Popover>
     </div>
