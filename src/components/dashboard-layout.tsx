@@ -75,10 +75,7 @@ export default function DashboardLayout({
             <Logo className="size-8 text-primary" />
             <div className="flex flex-col">
               <span className="text-lg font-semibold tracking-tighter">
-                MarketMix
-              </span>
-              <span className="text-xs text-muted-foreground -mt-1">
-                Navigator
+                Price in MMM
               </span>
             </div>
           </div>
