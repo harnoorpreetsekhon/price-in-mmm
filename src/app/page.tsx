@@ -68,14 +68,16 @@ export default function Home() {
       key: 'baselineRevenue',
       icon: BarChart,
       formatter: formatCurrency,
-      description: 'Revenue generated without any marketing activities.',
+      description:
+        'Projected sales revenue assuming no marketing or promotional activities occurred.',
     },
     {
       title: 'Incremental Revenue',
       key: 'incrementalRevenue',
       icon: TrendingUp,
       formatter: formatCurrency,
-      description: 'Revenue directly attributable to marketing efforts.',
+      description:
+        'Revenue generated directly from marketing and promotional activities.',
     },
     {
       title: 'Total Marketing Spend',
@@ -89,28 +91,32 @@ export default function Home() {
       key: 'totalROAS',
       icon: Target,
       formatter: (val: number) => `${formatNumber(val)}x`,
-      description: 'Return on Ad Spend. (Incremental Revenue / Marketing Spend)',
+      description:
+        'Return on Ad Spend, calculated as Incremental Revenue divided by Marketing Spend.',
     },
     {
       title: 'Price Elasticity',
       key: 'priceElasticity',
       icon: LineChart,
       formatter: formatNumber,
-      description: 'Sensitivity of demand to price changes.',
+      description:
+        'Measures how sales volume responds to price changes, isolated from other factors.',
     },
     {
       title: 'Optimal Price (Revenue)',
       key: 'optimalPriceRevenue',
       icon: DollarSign,
       formatter: formatCurrency,
-      description: 'Price that maximizes total revenue.',
+      description:
+        'The model-estimated price point that maximizes total revenue.',
     },
     {
       title: 'Optimal Price (Profit)',
       key: 'optimalPriceProfit',
       icon: DollarSign,
       formatter: formatCurrency,
-      description: 'Price that maximizes total profit.',
+      description:
+        'The model-estimated price point that maximizes total profit.',
     },
     {
       title: 'Promo Uplift',
@@ -136,7 +142,7 @@ export default function Home() {
             Price in MMM
           </h1>
           <div className="flex items-center space-x-2">
-            <DateRangePicker initialDate={dateRange} onApply={setDateRange} />
+            <DateRangePicker onApply={setDateRange} />
           </div>
         </div>
 
