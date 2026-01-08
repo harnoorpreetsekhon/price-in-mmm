@@ -57,7 +57,9 @@ export const calculateKpis = (data: MarketingData[]): Kpi => {
       d.marketing_spend_social +
       d.marketing_spend_display +
       d.marketing_spend_video +
-      d.marketing_spend_affiliate,
+      d.marketing_spend_affiliate +
+      d.marketing_spend_ooh +
+      d.marketing_spend_trade,
     0
   );
   

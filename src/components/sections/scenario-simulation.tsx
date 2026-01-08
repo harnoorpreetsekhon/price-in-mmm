@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -26,6 +25,8 @@ const SIMULATION_PARAMS = {
     display: 0.02,
     video: 0.06,
     affiliate: 0.03,
+    ooh: 0.04,
+    trade: 0.05,
   },
   saturation_alphas: {
     search: 0.8,
@@ -33,6 +34,8 @@ const SIMULATION_PARAMS = {
     display: 0.7,
     video: 0.85,
     affiliate: 0.75,
+    ooh: 0.6,
+    trade: 0.8,
   },
   saturation_ks: {
     search: 5000,
@@ -40,6 +43,8 @@ const SIMULATION_PARAMS = {
     display: 4000,
     video: 7000,
     affiliate: 3000,
+    ooh: 3500,
+    trade: 6000,
   },
 };
 
@@ -60,6 +65,8 @@ export default function ScenarioSimulationSection({
       display: data.reduce((a, b) => a + b.marketing_spend_display, 0),
       video: data.reduce((a, b) => a + b.marketing_spend_video, 0),
       affiliate: data.reduce((a, b) => a + b.marketing_spend_affiliate, 0),
+      ooh: data.reduce((a, b) => a + b.marketing_spend_ooh, 0),
+      trade: data.reduce((a, b) => a + b.marketing_spend_trade, 0),
     };
     const avgPrice = data.reduce((a, b) => a + b.price, 0) / data.length;
     const avgPromoPct = data.reduce((a, b) => a + b.promo_discount_pct, 0) / data.length;
@@ -72,7 +79,7 @@ export default function ScenarioSimulationSection({
   const [priceMultiplier, setPriceMultiplier] = useState(1);
   const [promoMultiplier, setPromoMultiplier] = useState(1);
   const [spendMultipliers, setSpendMultipliers] = useState({
-    search: 1, social: 1, display: 1, video: 1, affiliate: 1,
+    search: 1, social: 1, display: 1, video: 1, affiliate: 1, ooh: 1, trade: 1,
   });
 
   const handleSpendChange = (channel: keyof typeof spendMultipliers) => (value: number[]) => {

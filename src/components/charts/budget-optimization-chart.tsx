@@ -23,6 +23,8 @@ const channels = [
   { key: "display", name: "Display" },
   { key: "video", name: "Video" },
   { key: "affiliate", name: "Affiliate" },
+  { key: "ooh", name: "OOH" },
+  { key: "trade", name: "Trade" },
 ];
 
 // Simplified optimization logic. A real model would be much more complex.
@@ -36,7 +38,9 @@ const getOptimalBudgets = (currentSpend: Record<string, number>) => {
     social: avgSpend * 1.5,
     display: avgSpend * 0.8,
     video: avgSpend * 1.3,
-    affiliate: avgSpend * 0.7
+    affiliate: avgSpend * 0.7,
+    ooh: avgSpend * 0.9,
+    trade: avgSpend * 1.1,
   };
 
   // Normalize to maintain total spend
@@ -49,6 +53,8 @@ const getOptimalBudgets = (currentSpend: Record<string, number>) => {
     display: optimal.display * normalizationFactor,
     video: optimal.video * normalizationFactor,
     affiliate: optimal.affiliate * normalizationFactor,
+    ooh: optimal.ooh * normalizationFactor,
+    trade: optimal.trade * normalizationFactor,
   };
 };
 
@@ -70,6 +76,8 @@ export default function BudgetOptimizationChart({ data }: { data: any[] }) {
     display: data.reduce((a, b) => a + b.marketing_spend_display, 0),
     video: data.reduce((a, b) => a + b.marketing_spend_video, 0),
     affiliate: data.reduce((a, b) => a + b.marketing_spend_affiliate, 0),
+    ooh: data.reduce((a, b) => a + b.marketing_spend_ooh, 0),
+    trade: data.reduce((a, b) => a + b.marketing_spend_trade, 0),
   };
   
   const optimalSpend = getOptimalBudgets(currentSpend);

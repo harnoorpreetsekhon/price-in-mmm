@@ -51,6 +51,14 @@ export default function ChannelContributionChart({
       channel: "Affiliate",
       contribution: data.reduce((a, b) => a + b.media_contribution_affiliate, 0),
     },
+    {
+        channel: "OOH",
+        contribution: data.reduce((a, b) => a + b.media_contribution_ooh, 0),
+    },
+    {
+        channel: "Trade",
+        contribution: data.reduce((a, b) => a + b.media_contribution_trade, 0),
+    }
   ].sort((a,b) => b.contribution - a.contribution);
 
   return (

@@ -12,6 +12,8 @@ export type MarketingData = {
   marketing_spend_display: number;
   marketing_spend_video: number;
   marketing_spend_affiliate: number;
+  marketing_spend_ooh: number;
+  marketing_spend_trade: number;
   competitor_price: number;
   competitor_promos: number;
   distribution_score: number;
@@ -24,6 +26,8 @@ export type MarketingData = {
   media_contribution_display: number;
   media_contribution_video: number;
   media_contribution_affiliate: number;
+  media_contribution_ooh: number;
+  media_contribution_trade: number;
   price_effect: number;
   promo_effect: number;
   competition_effect: number;

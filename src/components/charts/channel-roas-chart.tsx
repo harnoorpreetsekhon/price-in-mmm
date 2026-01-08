@@ -29,6 +29,8 @@ export default function ChannelRoasChart({ data }: { data: MarketingData[] }) {
     display: data.reduce((a, b) => a + b.marketing_spend_display, 0),
     video: data.reduce((a, b) => a + b.marketing_spend_video, 0),
     affiliate: data.reduce((a, b) => a + b.marketing_spend_affiliate, 0),
+    ooh: data.reduce((a, b) => a + b.marketing_spend_ooh, 0),
+    trade: data.reduce((a, b) => a + b.marketing_spend_trade, 0),
   };
   const totalContribution = {
     search: data.reduce((a, b) => a + b.media_contribution_search, 0),
@@ -36,6 +38,8 @@ export default function ChannelRoasChart({ data }: { data: MarketingData[] }) {
     display: data.reduce((a, b) => a + b.media_contribution_display, 0),
     video: data.reduce((a, b) => a + b.media_contribution_video, 0),
     affiliate: data.reduce((a, b) => a + b.media_contribution_affiliate, 0),
+    ooh: data.reduce((a, b) => a + b.media_contribution_ooh, 0),
+    trade: data.reduce((a, b) => a + b.media_contribution_trade, 0),
   };
 
   const roasData = [
@@ -58,6 +62,14 @@ export default function ChannelRoasChart({ data }: { data: MarketingData[] }) {
     {
       channel: "Affiliate",
       roas: totalSpend.affiliate > 0 ? totalContribution.affiliate / totalSpend.affiliate : 0,
+    },
+     {
+      channel: "OOH",
+      roas: totalSpend.ooh > 0 ? totalContribution.ooh / totalSpend.ooh : 0,
+    },
+     {
+      channel: "Trade",
+      roas: totalSpend.trade > 0 ? totalContribution.trade / totalSpend.trade : 0,
     },
   ].sort((a,b) => b.roas - a.roas);
 
