@@ -6,7 +6,7 @@ export default function CompetitionSection({ data }: { data: MarketingData[] }) 
   return (
     <div id="competition">
       <h2 className="text-2xl font-bold tracking-tight mb-4 font-headline">
-        Competition &amp; Market Forces
+        Competition & Market Forces
       </h2>
       <div className="grid gap-4 md:grid-cols-2">
         <CompetitorPriceTrendChart data={data} />

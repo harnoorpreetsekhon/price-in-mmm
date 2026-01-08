@@ -59,6 +59,9 @@ export default function Home() {
       });
       setFilteredData(filtered);
       setKpis(calculateKpis(filtered));
+    } else {
+      setFilteredData([]);
+      setKpis(calculateKpis([]));
     }
   }, [dateRange]);
 

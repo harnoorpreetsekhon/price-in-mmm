@@ -38,6 +38,21 @@ export const formatPercentage = (value: number) => {
 
 // KPI Calculation
 export const calculateKpis = (data: MarketingData[]): Kpi => {
+  if (data.length === 0) {
+    return {
+      totalRevenue: 0,
+      baselineRevenue: 0,
+      incrementalRevenue: 0,
+      totalMarketingSpend: 0,
+      totalROAS: 0,
+      priceElasticity: 0,
+      optimalPriceRevenue: 0,
+      optimalPriceProfit: 0,
+      promoUplift: 0,
+      competitorPricePressureIndex: 0,
+    };
+  }
+
   const totalRevenue = data.reduce((sum, d) => sum + d.sales * d.price, 0);
   const baselineRevenue = data.reduce(
     (sum, d) => sum + d.baseline_sales * d.price,

@@ -14,7 +14,7 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine } from "recharts";
 import type { MarketingData } from "@/lib/types";
 import { formatCurrency } from "@/lib/calculations";
 
@@ -40,12 +40,14 @@ export default function CompetitorPriceTrendChart({
     competitorPrice: d.competitor_price,
   }));
 
+  const eventDate = data.length > 52 ? data[data.length - 52].date : undefined;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Competitor Price vs. Own Price</CardTitle>
         <CardDescription>
-          Tracking our price against the competitor's over the last two years.
+          Tracking our price against the competitor's over the selected period.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -85,6 +87,14 @@ export default function CompetitorPriceTrendChart({
               strokeDasharray="5 5"
               dot={false}
             />
+            {eventDate && (
+              <ReferenceLine 
+                x={eventDate} 
+                stroke="hsl(var(--destructive))" 
+                strokeDasharray="3 3" 
+                label={{ value: "Comp. Campaign", position: "insideTopLeft", fill: "hsl(var(--destructive))", fontSize: 10 }}
+              />
+            )}
           </LineChart>
         </ChartContainer>
       </CardContent>
