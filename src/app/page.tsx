@@ -8,6 +8,7 @@ import CorePerformanceSection from '@/components/sections/core-performance';
 import PriceEffectSection from '@/components/sections/price-effect';
 import MarketingImpactSection from '@/components/sections/marketing-impact';
 import CompetitionSection from '@/components/sections/competition';
+import OptimizationSection from '@/components/sections/optimization';
 import { mmmData, MarketingData } from '@/lib/data';
 import {
   calculateKpis,
@@ -25,6 +26,7 @@ import {
   Percent,
   TrendingUp,
   Swords,
+  Crosshair,
 } from 'lucide-react';
 import KpiCard from '@/components/kpi-card';
 import { DateRangePicker } from '@/components/date-range-picker';
@@ -35,13 +37,15 @@ export default function Home() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [kpis, setKpis] = useState<Kpi | null>(null);
   const [filteredData, setFilteredData] = useState<MarketingData[]>([]);
+  const [initialDateRange, setInitialDateRange] = useState<DateRange | undefined>(undefined);
 
   useEffect(() => {
     const defaultDateRange = {
-      from: subDays(new Date(), mmmData.length),
+      from: subDays(new Date(), mmmData.length > 0 ? mmmData.length : 365),
       to: new Date(),
     };
     setDateRange(defaultDateRange);
+    setInitialDateRange(defaultDateRange);
   }, []);
 
   useEffect(() => {
@@ -142,7 +146,7 @@ export default function Home() {
             Price in MMM
           </h1>
           <div className="flex items-center space-x-2">
-            <DateRangePicker onApply={setDateRange} />
+            <DateRangePicker initialDate={initialDateRange} onApply={setDateRange} />
           </div>
         </div>
 
@@ -182,6 +186,7 @@ export default function Home() {
             <PriceEffectSection data={filteredData} kpis={kpis} />
             <MarketingImpactSection data={filteredData} />
             <CompetitionSection data={filteredData} />
+            <OptimizationSection data={filteredData} />
           </div>
         ) : (
           <div className="space-y-8">

@@ -20,6 +20,7 @@ import {
   Megaphone,
   Swords,
   Badge,
+  Crosshair,
 } from "lucide-react";
 import { Logo } from "@/components/icons";
 import AutomatedInsights from "./automated-insights";
@@ -30,6 +31,7 @@ const menuItems = [
   { id: "price-effect", label: "Price Effects", icon: DollarSign },
   { id: "marketing-impact", label: "Marketing Impact", icon: Megaphone },
   { id: "competition", label: "Competition", icon: Swords },
+  { id: "optimization", label: "Optimization", icon: Crosshair },
 ];
 
 export default function DashboardLayout({
