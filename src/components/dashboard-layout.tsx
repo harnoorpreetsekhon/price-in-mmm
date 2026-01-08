@@ -21,6 +21,7 @@ import {
   Swords,
   Badge,
   Crosshair,
+  TestTube2,
 } from "lucide-react";
 import { Logo } from "@/components/icons";
 import AutomatedInsights from "./automated-insights";
@@ -32,6 +33,7 @@ const menuItems = [
   { id: "marketing-impact", label: "Marketing Impact", icon: Megaphone },
   { id: "competition", label: "Competition", icon: Swords },
   { id: "optimization", label: "Optimization", icon: Crosshair },
+  { id: "simulation", label: "Simulation", icon: TestTube2 },
 ];
 
 export default function DashboardLayout({

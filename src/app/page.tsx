@@ -9,6 +9,7 @@ import PriceEffectSection from '@/components/sections/price-effect';
 import MarketingImpactSection from '@/components/sections/marketing-impact';
 import CompetitionSection from '@/components/sections/competition';
 import OptimizationSection from '@/components/sections/optimization';
+import ScenarioSimulationSection from '@/components/sections/scenario-simulation';
 import { mmmData, MarketingData } from '@/lib/data';
 import {
   calculateKpis,
@@ -40,12 +41,14 @@ export default function Home() {
   const [initialDateRange, setInitialDateRange] = useState<DateRange | undefined>(undefined);
 
   useEffect(() => {
-    const defaultDateRange = {
-      from: subDays(new Date(), mmmData.length > 0 ? mmmData.length : 365),
-      to: new Date(),
-    };
-    setDateRange(defaultDateRange);
-    setInitialDateRange(defaultDateRange);
+    if (mmmData.length > 0) {
+      const defaultDateRange = {
+        from: new Date(mmmData[0].date),
+        to: new Date(mmmData[mmmData.length - 1].date),
+      };
+      setDateRange(defaultDateRange);
+      setInitialDateRange(defaultDateRange);
+    }
   }, []);
 
   useEffect(() => {
@@ -180,13 +183,14 @@ export default function Home() {
           )}
         </div>
 
-        {kpis ? (
+        {kpis && filteredData.length > 0 ? (
           <div className="space-y-8">
             <CorePerformanceSection data={filteredData} />
             <PriceEffectSection data={filteredData} kpis={kpis} />
             <MarketingImpactSection data={filteredData} />
             <CompetitionSection data={filteredData} />
             <OptimizationSection data={filteredData} />
+            <ScenarioSimulationSection data={filteredData} />
           </div>
         ) : (
           <div className="space-y-8">
